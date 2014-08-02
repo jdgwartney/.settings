@@ -1,8 +1,19 @@
 #!/bin/bash
 
+#
+# Install all the . files into the home directory
+#
+
 setupDotFile() {
   local -r file=$1
-ln -sF $HOME/.settings/$file $HOME/.${file}
+  ln -sF $HOME/.settings/$file $HOME/${file}
+  if [ $? -ne 0 ]
+  then
+    echo "Failed to link $file to $HOME/$file"
+  fi
 }
 
-setupDotFile .bash_profile
+for file in $(ls -d .[!.]* | grep -v .git)
+do
+  setupDotFile $file
+done
