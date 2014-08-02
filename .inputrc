@@ -1,0 +1,15 @@
+# readline settings
+# To re-read (and implement changes to this file) use:
+# bind -f $SETTINGS/.inputrc
+
+$include /etc/inputrc
+
+$if Bash
+
+# Ignore case when doing completion
+set completion-ignore-case on
+
+
+"\C-xp": "echo Hello"
+
+$endif
