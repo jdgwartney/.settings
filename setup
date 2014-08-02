@@ -1,0 +1,8 @@
+#!/bin/bash
+
+setupDotFile() {
+  local -r file=$1
+ln -sF $HOME/.settings/$file $HOME/.${file}
+}
+
+setupDotFile .bash_profile
