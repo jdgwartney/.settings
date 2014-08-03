@@ -115,10 +115,12 @@ alias swiss="cd $GIT_WORKING/swisscom"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
 
-"\C-xp": "echo Hello"
-
 export PATH=/usr/local/bin:$PATH
 
+
+#
+# Android SDK Setup
+#
 export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk"
 
 #
