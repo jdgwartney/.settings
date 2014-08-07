@@ -12,4 +12,10 @@ set completion-ignore-case on
 
 "\C-xp": "echo Hello"
 
+
+#
+# Boundary API
+#
+"\C-be": "event-create myTitle "
+
 $endif

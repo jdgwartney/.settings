@@ -96,7 +96,6 @@ export PATH=$PATH:$MYSQL_HOME/bin
 # Alias
 #
 
-
 #
 # Shortcuts to GIT repositories
 #
@@ -131,27 +130,27 @@ export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk
 #
 # Boundary API Configuration
 #
-[[ -s "$HOME/.boundary" ]] && source "$HOME/.boundary" ]]
+[[ -s "$HOME/.boundary" ]] && source "$HOME/.boundary" 
 
 #
 # Boundary API Shell Configuration
 #
-[[ -s "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" ]]
+[[ -s "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" 
 
 #
 # OpenStack Configuration
 #
-[[ -s "$HOME/.openstack" ]] && source "$HOME/.openstack" ]]
+[[ -s "$HOME/.openstack" ]] && source "$HOME/.openstack" 
 
 #
 # GrapDat API Configuration
 #
-[[ -s "$HOME/.graphdat" ]] && source "$HOME/.graphdat" ]]
+[[ -s "$HOME/.graphdat.conf" ]] && source "$HOME/.graphdat.conf" 
 
 #
 # SNMP4J SMI Configuration
 #
-[[ -s "$HOME/.snmp4j" ]] && source "$HOME/.snmp4j" ]]
+[[ -s "$HOME/.snmp4j" ]] && source "$HOME/.snmp4j" 
 
 #
 # Ruby Version Manager
