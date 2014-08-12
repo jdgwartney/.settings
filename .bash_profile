@@ -91,6 +91,12 @@ export PATH=$PATH:$LIQUIBASE_HOME/sdk
 export MYSQL_HOME=/usr/local/mysql
 export PATH=$PATH:$MYSQL_HOME/bin
 
+#
+# Mongo DB
+#
+export MONGO_DB_HOME="/Applications/mongodb-osx-x86_64-2.6.3"
+export PATH="$PATH:$MONGO_DB_HOME/bin"
+
 
 #
 # Alias
