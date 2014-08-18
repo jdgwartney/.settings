@@ -97,6 +97,11 @@ export PATH=$PATH:$MYSQL_HOME/bin
 export MONGO_DB_HOME="/Applications/mongodb-osx-x86_64-2.6.3"
 export PATH="$PATH:$MONGO_DB_HOME/bin"
 
+#
+# Nagios plugins
+#
+export PATH="$PATH:/usr/local/nagios/libexec"
+
 
 #
 # Alias
