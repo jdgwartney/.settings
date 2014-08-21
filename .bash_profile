@@ -122,6 +122,7 @@ alias be="cd $GIT_WORKING/boundary-event-plugins"
 alias om="cd $GIT_WORKING/swisscom/openstack-monitoring"
 alias bshell="cd $GITS/boundary-api-shell"
 alias swiss="cd $GIT_WORKING/swisscom"
+alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
 
@@ -156,7 +157,7 @@ export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk
 #
 # GrapDat API Configuration
 #
-[[ -s "$HOME/.graphdat.conf" ]] && source "$HOME/.graphdat.conf" 
+#[[ -s "$HOME/.graphdat.conf" ]] && source "$HOME/.graphdat.conf" 
 
 #
 # SNMP4J SMI Configuration
