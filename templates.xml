@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="LuaUniversalTemplateContextType" deleted="false" description="Class Implementation" enabled="true" name="class">-- Copyright 2014 Boundary,Inc.
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--    http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
+${class} = {}
+
+function ${class}:new()
+  local o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+function ${class}:method(arg)
+${cursor}
+end</template><template autoinsert="true" context="LuaUniversalTemplateContextType" deleted="false" description="unit test" enabled="true" name="luaunit">-- Copyright 2014 Boundary,Inc.
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--    http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
+require("${module_to_test}")
+local LuaUnit = require("luaunit")
+
+${test_class} = {}
+
+function ${test_class}:setUp()
+end
+
+function ${test_class}:tearDown()
+end
+
+function ${test_class}:testConstructor()
+  local o = ${class}:new()
+  assertEquals(o ~= nil,true)
+end
+
+function ${test_class}:testX()
+  local o = ${class}:new()
+  ${cursor}
+end
+
+LuaUnit:run()</template></templates>
