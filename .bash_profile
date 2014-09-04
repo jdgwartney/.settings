@@ -125,9 +125,12 @@ alias centos="cd $GIT_WORKING/boundary-event-sdk-centos"
 alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
 alias bshell="cd $GITS/boundary-api-shell"
 alias swiss="cd $GIT_WORKING/swisscom"
+export SVN_WORKING=$HOME/svn_working
+alias svnw="cd $SVN_WORKING"
 alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
+alias love="/Applications/love.app/Contents/MacOS/love" 
 
 export PATH=/usr/local/bin:$PATH
 
