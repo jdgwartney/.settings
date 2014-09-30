@@ -10,6 +10,10 @@ set -o vi
 PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 export PATH
 
+export PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
+
+export PATH=$PATH:/usr/local/sbin
+
 #
 # Maven configuration
 #
@@ -55,7 +59,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
 export EC2_HOME=/usr/local/ec2/ec2-api-tools-1.6.12.2
 export PATH=$PATH:$EC2_HOME/bin
 
-[[ -s $HOME/.aws ]] && (source $HOME/.aws || echo "$HOME/.aws not found")
+[[ -s $HOME/.aws.conf ]] && source $HOME/.aws.conf 
 
 export EC2_URL=https://ec2.us-east-1.amazonaws.com
 
@@ -64,7 +68,7 @@ export EC2_URL=https://ec2.us-east-1.amazonaws.com
 #
 export AWS_CLOUDWATCH_HOME=/usr/local/ec2/CloudWatch-1.0.20.0
 export PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
-export AWS_CLOUDWATCH_URL=http://monitoring.us-east-1.amazonaws.com/
+export AWS_CLOUDWATCH_URL=http://monitoring.us-west-1.amazonaws.com/
 export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
 
 #
@@ -114,12 +118,12 @@ export GIT_WORKING=$HOME/git_working
 export GITS=$HOME/git
 alias gitw="cd $GIT_WORKING"
 alias gits="cd $GITS"
+alias ba="cd $GITS/boundary-service-database/api"
 alias bc="cd $GITS/boundary-event-sdk"
 alias bd="cd $GITS/boundary-service-database/db"
-alias ba="cd $GITS/boundary-service-database/api"
-alias bs="cd $GITS/camel-ping"
-alias bps="cd $GITS/boundary-plugin-shell"
 alias be="cd $GIT_WORKING/boundary-event-plugins"
+alias bs="cd $GITS/camel-ping"
+alias bpd="$GITS/boundary-plugin-dev"
 alias om="cd $GIT_WORKING/swisscom/openstack-monitoring"
 alias centos="cd $GIT_WORKING/boundary-event-sdk-centos"
 alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
@@ -128,11 +132,18 @@ alias swiss="cd $GIT_WORKING/swisscom"
 export SVN_WORKING=$HOME/svn_working
 alias svnw="cd $SVN_WORKING"
 alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
+alias jmxa="cd $GITS/boundary-jmx-agent"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
 
 export PATH=/usr/local/bin:$PATH
+
+#
+# Plugins
+#
+alias bps="cd $GITS/boundary-plugin-shell"
+alias rmq="cd $GITS/boundary-plugin-rabbitmq"
 
 
 #
@@ -156,6 +167,17 @@ export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk
 [[ -s "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" 
 
 #
+# Data Integration
+#
+
+function spoon() {
+ export PENTAHO_DI_JAVA_OPTIONS="-Xmx4096m -XX:MaxPermSize=4096m"
+ pushd /Applications/data-integration > /dev/null 2>&1
+ ./spoon.sh > /dev/null 2>&1 &
+ popd > /dev/null 2>&1
+}
+
+#
 # OpenStack Configuration
 #
 [[ -s "$HOME/.openstack" ]] && source "$HOME/.openstack" 
@@ -169,6 +191,11 @@ export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk
 # SNMP4J SMI Configuration
 #
 [[ -s "$HOME/.snmp4j" ]] && source "$HOME/.snmp4j" 
+
+#
+# Totango Configuration
+#
+[[ -s "$HOME/.totango" ]] && source "$HOME/.totango" 
 
 #
 # Ruby Version Manager
