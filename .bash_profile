@@ -171,10 +171,24 @@ bp-acc() {
 }
 
 bp-set() {
-  typeset -r config=$1
+  typeset config=$1
   BOUNDARY_PREMIUM_CURRENT_ACCOUNT="$config"
 
-  [ -r "$config" ] && source "$config"
+  # Create a menu if a configuration was not specified
+  if [ -z "$config" ]
+  then
+    select opt in $(ls -1 $HOME/.boundary/accounts); do
+      config="$opt"
+      break
+    done
+  fi
+
+  if [ -r "$HOME/.boundary/accounts/$config" ]
+  then 
+    source "$HOME/.boundary/accounts/$config"
+  fi
+
+  bp-env
 }
 
 
