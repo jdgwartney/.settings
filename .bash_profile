@@ -59,9 +59,9 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
 export EC2_HOME=/usr/local/ec2/ec2-api-tools-1.6.12.2
 export PATH=$PATH:$EC2_HOME/bin
 
-[[ -s $HOME/.aws.conf ]] && source $HOME/.aws.conf 
+[[ -s $HOME/.ec2-credentials ]] && source $HOME/.ec2-credentials
 
-export EC2_URL=https://ec2.us-east-1.amazonaws.com
+#export EC2_URL=https://ec2.us-east-1.amazonaws.com
 
 #
 # CloudWatch Tools
@@ -129,10 +129,12 @@ alias centos="cd $GIT_WORKING/boundary-event-sdk-centos"
 alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
 alias bshell="cd $GITS/boundary-api-shell"
 alias swiss="cd $GIT_WORKING/swisscom"
+
 export SVN_WORKING=$HOME/svn_working
 alias svnw="cd $SVN_WORKING"
 alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
 alias jmxa="cd $GITS/boundary-jmx-agent"
+alias apip="cd $GITS/boundary-python-plugin-framework"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
@@ -143,7 +145,38 @@ export PATH=/usr/local/bin:$PATH
 # Plugins
 #
 alias bps="cd $GITS/boundary-plugin-shell"
-alias rmq="cd $GITS/boundary-plugin-rabbitmq"
+alias rabbitmq="cd $GITS/boundary-plugin-rabbitmq"
+# AWS Cloud Watch Plugins
+alias aws-ec2="cd $GITS/boundary-plugin-aws-ec2"
+alias aws-ebs="cd $GITS/boundary-plugin-aws-ebs"
+alias aws-elb="cd $GITS/boundary-plugin-aws-elb"
+alias aws-rds="cd $GITS/boundary-plugin-aws-rds"
+alias aws-sqs="cd $GITS/boundary-plugin-aws-sqs"
+alias postp="cd $GITS/boundary-plugin-postgresql"
+alias ticker="cd $GITS/boundary-plugin-ticker"
+alias redis="cd $GITS/boundary-plugin-redis"
+alias aweb="cd $GITS/boundary-action-handler"
+
+
+#
+# Shows the current environment
+#
+bp-env() {
+  echo "$BOUNDARY_PREMIUM_CURRENT_ACCOUNT"
+  env | grep BOUNDARY_PREMIUM | sort
+}
+
+bp-acc() {
+  ls -1 "$HOME/.boundary/accounts"
+}
+
+bp-set() {
+  typeset -r config=$1
+  BOUNDARY_PREMIUM_CURRENT_ACCOUNT="$config"
+
+  [ -r "$config" ] && source "$config"
+}
+
 
 
 #
@@ -159,7 +192,7 @@ export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk
 #
 # Boundary API Configuration
 #
-[[ -s "$HOME/.boundary" ]] && source "$HOME/.boundary" 
+[[ -s "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
 
 #
 # Boundary API Shell Configuration
