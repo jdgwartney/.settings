@@ -72,6 +72,13 @@ export AWS_CLOUDWATCH_URL=http://monitoring.us-west-1.amazonaws.com/
 export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
 
 #
+# RDS Tools
+export AWS_RDS_HOME="/Applications/RDSCli-1.18.001"
+export PATH=$PATH:$AWS_RDS_HOME/bin
+export AWS_CREDENTIAL_FILE=$HOME/.rds-credentials
+export EC2_REGION=us-west-1
+
+#
 # Chef
 #
 CHEF_INSTALL=/opt/chef/embedded
@@ -130,6 +137,8 @@ alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
 alias bshell="cd $GITS/boundary-api-shell"
 alias swiss="cd $GIT_WORKING/swisscom"
 
+alias jmx="cd $GITS/jmx-tutorial"
+
 export SVN_WORKING=$HOME/svn_working
 alias svnw="cd $SVN_WORKING"
 alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
@@ -138,6 +147,15 @@ alias apip="cd $GITS/boundary-python-plugin-framework"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
+
+#
+# Tomcat Server Configuration
+#
+TOMCAT_HOME=/Applications/apache-tomcat-7.0.53
+TOMCAT_BIN="$TOMCAT_HOME/bin"
+alias tomstartup="$TOMCAT_BIN/startup.sh"
+alias tomshutdown="$TOMCAT_BIN/shutdown.sh"
+
 
 export PATH=/usr/local/bin:$PATH
 
@@ -156,6 +174,7 @@ alias postp="cd $GITS/boundary-plugin-postgresql"
 alias ticker="cd $GITS/boundary-plugin-ticker"
 alias redis="cd $GITS/boundary-plugin-redis"
 alias aweb="cd $GITS/boundary-action-handler"
+alias vmware="cd $GITS/boundary-plugin-vmware"
 
 
 #
@@ -190,6 +209,8 @@ bp-set() {
 
   bp-env
 }
+
+[ -r "$HOME/git/boundary-python-plugin-framework/env.sh" ] && source "$HOME/git/boundary-python-plugin-framework/env.sh"
 
 
 
