@@ -137,6 +137,7 @@ alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
 alias bshell="cd $GITS/boundary-api-shell"
 alias swiss="cd $GIT_WORKING/swisscom"
 
+
 alias jmx="cd $GITS/jmx-tutorial"
 
 export SVN_WORKING=$HOME/svn_working
@@ -162,7 +163,9 @@ export PATH=/usr/local/bin:$PATH
 #
 # Plugins
 #
+alias bpjf="cd $GITS/boundary-plugin-framework-java"
 alias bps="cd $GITS/boundary-plugin-shell"
+alias cas="cd $GITS/boundary-plugin-cassandra"
 alias rabbitmq="cd $GITS/boundary-plugin-rabbitmq"
 # AWS Cloud Watch Plugins
 alias aws-ec2="cd $GITS/boundary-plugin-aws-ec2"
@@ -175,49 +178,51 @@ alias ticker="cd $GITS/boundary-plugin-ticker"
 alias redis="cd $GITS/boundary-plugin-redis"
 alias aweb="cd $GITS/boundary-action-handler"
 alias vmware="cd $GITS/boundary-plugin-vmware"
+alias weather="cd $GITS/boundary-plugin-weather"
 
 
 #
 # Shows the current environment
 #
-bp-env() {
-  echo "$BOUNDARY_PREMIUM_CURRENT_ACCOUNT"
-  env | grep BOUNDARY_PREMIUM | sort
-}
-
-bp-acc() {
-  ls -1 "$HOME/.boundary/accounts"
-}
-
-bp-set() {
-  typeset config=$1
-  BOUNDARY_PREMIUM_CURRENT_ACCOUNT="$config"
-
+#bp-env() {
+#  env | grep BOUNDARY_PREMIUM | sort
+#}
+#
+#bp-acc() {
+#  ls -1 "$HOME/.boundary/accounts"
+#}
+#
+#bp-set() {
+#  typeset config=$1
+#  export BOUNDARY_PREMIUM_CURRENT_ACCOUNT="$config"
+#
   # Create a menu if a configuration was not specified
-  if [ -z "$config" ]
-  then
-    select opt in $(ls -1 $HOME/.boundary/accounts); do
-      config="$opt"
-      break
-    done
-  fi
-
-  if [ -r "$HOME/.boundary/accounts/$config" ]
-  then 
-    source "$HOME/.boundary/accounts/$config"
-  fi
-
-  bp-env
-}
+#  if [ -z "$config" ]
+#  then
+#    select opt in $(ls -1 $HOME/.boundary/accounts); do
+#      config="$opt"
+#      break
+#    done
+#  fi
+#
+#  if [ -r "$HOME/.boundary/accounts/$config" ]
+#  then 
+#    source "$HOME/.boundary/accounts/$config"
+#  fi
+#
+#  bp-env
+#}
 
 [ -r "$HOME/git/boundary-python-plugin-framework/env.sh" ] && source "$HOME/git/boundary-python-plugin-framework/env.sh"
-
 
 
 #
 # Android SDK Setup
 #
-export ANDROID_SDK="/Users/davidg/Development/adt-bundle-mac-x86_64-20140321/sdk"
+export ANDROID_SDK="$HOME/adt-bundle-mac-x86_64-20140702"
+export PATH="$PATH:$ANDROID_SDK/sdk/tools"
+export PATH="$PATH:$ANDROID_SDK/sdk/platform-tools"
+alias android-eclipse="open $ANDROID_SDK/eclipse/Eclipse.app/"
 
 #
 # Boundary API Shell
