@@ -15,6 +15,18 @@ export PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.
 export PATH=$PATH:/usr/local/sbin
 
 #
+# Ant
+#
+ANT_HOME=/Applications/apache-ant-1.9.4
+PATH=$PATH:$ANT_HOME/bin
+
+#
+# Cassandra
+#
+CASSANDRA_INSTALL=/Applications/dsc-cassandra-2.0.11
+export PATH=$PATH:$CASSANDRA_INSTALL/bin
+
+#
 # Maven configuration
 #
 export M2_HOME=/Applications/apache-maven-3.2.1
@@ -43,7 +55,7 @@ mvn archetype:generate -DarchetypeGroupId="${archetypeGroupId}" -DarchetypeArtif
 #
 # Arcanist configuration
 #
-export ARCANIST_INSTALL=/Applications/arcanist/arcanist
+export ARCANIST_INSTALL=$HOME/arcanist
 export PATH=$PATH:$ARCANIST_INSTALL/bin
 
 #
@@ -88,7 +100,8 @@ export PATH=$CHEF_INSTALL/bin:$PATH
 # Go language
 #
 export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin
+export GOPATH=$HOME/gocode
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 LIQUIBASE_HOME=/Applications/liquibase
 export PATH=$PATH:$LIQUIBASE_HOME
@@ -134,8 +147,9 @@ alias bpd="cd $GIT_WORKING/boundary-plugin-dev"
 alias om="cd $GIT_WORKING/swisscom/openstack-monitoring"
 alias centos="cd $GIT_WORKING/boundary-event-sdk-centos"
 alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
-alias bshell="cd $GITS/boundary-api-shell"
+alias bcli="cd $GITS/boundary-api-cli"
 alias swiss="cd $GIT_WORKING/swisscom"
+alias bvm="cd $GITS/boundary-vmware"
 
 
 alias jmx="cd $GITS/jmx-tutorial"
@@ -147,7 +161,9 @@ alias jmxa="cd $GITS/boundary-jmx-agent"
 alias apip="cd $GITS/boundary-python-plugin-framework"
 
 alias eclipse="open /Applications/eclipse/Eclipse.app/"
+alias eclipse-luna="open /Applications/eclipse-luna/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
+alias editmd="open -a /Applications/haroopad.app"
 
 #
 # Tomcat Server Configuration
@@ -173,12 +189,14 @@ alias aws-ebs="cd $GITS/boundary-plugin-aws-ebs"
 alias aws-elb="cd $GITS/boundary-plugin-aws-elb"
 alias aws-rds="cd $GITS/boundary-plugin-aws-rds"
 alias aws-sqs="cd $GITS/boundary-plugin-aws-sqs"
+alias jvm="cd $GITS/boundary-plugin-jvm"
 alias postp="cd $GITS/boundary-plugin-postgresql"
 alias ticker="cd $GITS/boundary-plugin-ticker"
 alias redis="cd $GITS/boundary-plugin-redis"
 alias aweb="cd $GITS/boundary-action-handler"
 alias vmware="cd $GITS/boundary-plugin-vmware"
 alias weather="cd $GITS/boundary-plugin-weather"
+alias jpf="cd $GITS/boundary-plugin-framework-java"
 
 
 #
@@ -214,6 +232,7 @@ alias weather="cd $GITS/boundary-plugin-weather"
 #}
 
 [ -r "$HOME/git/boundary-python-plugin-framework/env.sh" ] && source "$HOME/git/boundary-python-plugin-framework/env.sh"
+[ -r "$HOME/git/boundary-api-cli/env.sh" ] && source "$HOME/git/boundary-api-cli/env.sh"
 
 
 #
