@@ -62,8 +62,9 @@ export PATH=$PATH:$ARCANIST_INSTALL/bin
 # Java configuration
 #
 #export JAVA_HOME=$(/usr/libexec/java_home)
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
 
 #
 # EC2 Tools
@@ -136,8 +137,10 @@ export PATH="$PATH:/usr/local/nagios/libexec"
 #
 export GIT_WORKING=$HOME/git_working
 export GITS=$HOME/git
+export GGITS=$HOME/ggit
 alias gitw="cd $GIT_WORKING"
 alias gits="cd $GITS"
+alias ggit="cd $GGITS"
 alias ba="cd $GITS/boundary-service-database/api"
 alias bc="cd $GITS/boundary-event-sdk"
 alias bd="cd $GITS/boundary-service-database/db"
@@ -150,6 +153,7 @@ alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
 alias bcli="cd $GITS/boundary-api-cli"
 alias swiss="cd $GIT_WORKING/swisscom"
 alias bvm="cd $GITS/boundary-vmware"
+alias ipmi="cd $GITS/boundary-ipmi-integration"
 
 
 alias jmx="cd $GITS/jmx-tutorial"
@@ -179,16 +183,10 @@ export PATH=/usr/local/bin:$PATH
 #
 # Plugins
 #
-alias bpjf="cd $GITS/boundary-plugin-framework-java"
 alias bps="cd $GITS/boundary-plugin-shell"
 alias cas="cd $GITS/boundary-plugin-cassandra"
 alias rabbitmq="cd $GITS/boundary-plugin-rabbitmq"
-# AWS Cloud Watch Plugins
-alias aws-ec2="cd $GITS/boundary-plugin-aws-ec2"
-alias aws-ebs="cd $GITS/boundary-plugin-aws-ebs"
-alias aws-elb="cd $GITS/boundary-plugin-aws-elb"
-alias aws-rds="cd $GITS/boundary-plugin-aws-rds"
-alias aws-sqs="cd $GITS/boundary-plugin-aws-sqs"
+alias atc="cd $GITS/boundary-plugin-apache-tomcat"
 alias jvm="cd $GITS/boundary-plugin-jvm"
 alias postp="cd $GITS/boundary-plugin-postgresql"
 alias ticker="cd $GITS/boundary-plugin-ticker"
@@ -198,38 +196,6 @@ alias vmware="cd $GITS/boundary-plugin-vmware"
 alias weather="cd $GITS/boundary-plugin-weather"
 alias jpf="cd $GITS/boundary-plugin-framework-java"
 
-
-#
-# Shows the current environment
-#
-#bp-env() {
-#  env | grep BOUNDARY_PREMIUM | sort
-#}
-#
-#bp-acc() {
-#  ls -1 "$HOME/.boundary/accounts"
-#}
-#
-#bp-set() {
-#  typeset config=$1
-#  export BOUNDARY_PREMIUM_CURRENT_ACCOUNT="$config"
-#
-  # Create a menu if a configuration was not specified
-#  if [ -z "$config" ]
-#  then
-#    select opt in $(ls -1 $HOME/.boundary/accounts); do
-#      config="$opt"
-#      break
-#    done
-#  fi
-#
-#  if [ -r "$HOME/.boundary/accounts/$config" ]
-#  then 
-#    source "$HOME/.boundary/accounts/$config"
-#  fi
-#
-#  bp-env
-#}
 
 [ -r "$HOME/git/boundary-python-plugin-framework/env.sh" ] && source "$HOME/git/boundary-python-plugin-framework/env.sh"
 [ -r "$HOME/git/boundary-api-cli/env.sh" ] && source "$HOME/git/boundary-api-cli/env.sh"
@@ -268,6 +234,13 @@ function spoon() {
  ./spoon.sh > /dev/null 2>&1 &
  popd > /dev/null 2>&1
 }
+
+#
+# Faban
+#
+export FABAN_INSTALL=/Applications/faban
+export PATH=$PATH:$FABAN_INSTALL/bin
+
 
 #
 # OpenStack Configuration
