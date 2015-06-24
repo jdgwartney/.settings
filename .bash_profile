@@ -10,8 +10,6 @@ set -o vi
 PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 export PATH
 
-export PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
-
 export PATH=$PATH:/usr/local/sbin
 
 #
@@ -23,34 +21,14 @@ PATH=$PATH:$ANT_HOME/bin
 #
 # Cassandra
 #
-CASSANDRA_INSTALL=/Applications/dsc-cassandra-2.0.11
-export PATH=$PATH:$CASSANDRA_INSTALL/bin
+CASSANDRA_INSTALL=/Applications/dsc-cassandra-2.1.3
+export PATH=$PATH:$CASSANDRA_INSTALL/bin:$CASSANDRA_INSTALL/tools/bin
 
 #
 # Maven configuration
 #
 export M2_HOME=/Applications/apache-maven-3.2.1
 export PATH=$PATH:$M2_HOME/bin
-
-function GenerateCamelComponent() {
-  typeset -r groupId="$1"
-  typeset -r artifactId="$2"
-  typeset -r name="$3"
-  typeset -r scheme="$4"
-  typeset -r archetypeGroupId="org.apache.camel.archetypes"
-  typeset -r archetypeArtifactId="camel-archetype-component"
-  typeset -r archetypeVersion="2.13.1"
-
-  if [ -z "${groupId}" -o -z "${artifactId}" -o -z "${name}" -o -z "${scheme}" ]
-  then
-    echo "usage: GenerateCamelComponent [groupId] [artifactId] [name] [scheme]" 
-    return 1
-  fi
-
-mvn archetype:generate -DarchetypeGroupId="${archetypeGroupId}" -DarchetypeArtifactId="${archetypeArtifactId}" -DarchetypeVersion="${archetypeVersion}" -DgroupId="${groupId}" -DartifactId="${artifactId}" -Dname="${name}" -Dscheme="${scheme}"
-
-   return $?
- }
 
 #
 # Arcanist configuration
@@ -61,10 +39,14 @@ export PATH=$PATH:$ARCANIST_INSTALL/bin
 #
 # Java configuration
 #
-#export JAVA_HOME=$(/usr/libexec/java_home)
-#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
-#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
+
+#
+# Gradle Configuration
+#
+export GRADLE_HOME="/Applications/gradle-2.3"
+export PATH=$PATH:$GRADLE_HOME/bin
 
 #
 # EC2 Tools
@@ -72,7 +54,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
 export EC2_HOME=/usr/local/ec2/ec2-api-tools-1.6.12.2
 export PATH=$PATH:$EC2_HOME/bin
 
-[[ -s $HOME/.ec2-credentials ]] && source $HOME/.ec2-credentials
+[[ -r $HOME/.ec2-credentials ]] && source $HOME/.ec2-credentials
 
 #export EC2_URL=https://ec2.us-east-1.amazonaws.com
 
@@ -86,6 +68,7 @@ export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
 
 #
 # RDS Tools
+#
 export AWS_RDS_HOME="/Applications/RDSCli-1.18.001"
 export PATH=$PATH:$AWS_RDS_HOME/bin
 export AWS_CREDENTIAL_FILE=$HOME/.rds-credentials
@@ -104,10 +87,12 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/gocode
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
+#
+# Liquibase
+#
 LIQUIBASE_HOME=/Applications/liquibase
 export PATH=$PATH:$LIQUIBASE_HOME
 export PATH=$PATH:$LIQUIBASE_HOME/sdk
-
 
 #
 # MySQL
@@ -141,6 +126,7 @@ export GGITS=$HOME/ggit
 alias gitw="cd $GIT_WORKING"
 alias gits="cd $GITS"
 alias ggit="cd $GGITS"
+alias myapp="cd $GITS/my-app"
 alias ba="cd $GITS/boundary-service-database/api"
 alias bc="cd $GITS/boundary-event-sdk"
 alias bd="cd $GITS/boundary-service-database/db"
@@ -154,6 +140,7 @@ alias bcli="cd $GITS/boundary-api-cli"
 alias swiss="cd $GIT_WORKING/swisscom"
 alias bvm="cd $GITS/boundary-vmware"
 alias ipmi="cd $GITS/boundary-ipmi-integration"
+alias dp="cd $GITS/boundary-plugin-demo"
 
 
 alias jmx="cd $GITS/jmx-tutorial"
@@ -164,10 +151,14 @@ alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
 alias jmxa="cd $GITS/boundary-jmx-agent"
 alias apip="cd $GITS/boundary-python-plugin-framework"
 
-alias eclipse="open /Applications/eclipse/Eclipse.app/"
-alias eclipse-luna="open /Applications/eclipse-luna/Eclipse.app/"
+alias eclipse-old="open /Applications/eclipse/Eclipse.app/"
+alias eclipse="open /Applications/eclipse-luna/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
+
+alias cass="cd $GITS/vagrant-cassandra"
+
+alias pycharm="'/Applications/PyCharm CE.app/Contents/MacOS/pycharm'&"
 
 #
 # Tomcat Server Configuration
@@ -195,9 +186,11 @@ alias aweb="cd $GITS/boundary-action-handler"
 alias vmware="cd $GITS/boundary-plugin-vmware"
 alias weather="cd $GITS/boundary-plugin-weather"
 alias jpf="cd $GITS/boundary-plugin-framework-java"
+alias wpp="cd $GITS/boundary-plugin-windows-process"
 
-
-[ -r "$HOME/git/boundary-python-plugin-framework/env.sh" ] && source "$HOME/git/boundary-python-plugin-framework/env.sh"
+#
+# Setup Boundary CLI environment variables
+#
 [ -r "$HOME/git/boundary-api-cli/env.sh" ] && source "$HOME/git/boundary-api-cli/env.sh"
 
 
@@ -210,19 +203,19 @@ export PATH="$PATH:$ANDROID_SDK/sdk/platform-tools"
 alias android-eclipse="open $ANDROID_SDK/eclipse/Eclipse.app/"
 
 #
-# Boundary API Shell
+# Matlab
 #
-[[ -s "$HOME/.bshell/env.sh" ]] && source "$HOME/.bshell"
-
-#
-# Boundary API Configuration
-#
-[[ -s "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
+alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
 
 #
 # Boundary API Shell Configuration
 #
-[[ -s "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" 
+[[ -r "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" 
+
+#
+# Boundary API Configuration
+#
+[[ -r "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
 
 #
 # Data Integration
@@ -245,25 +238,45 @@ export PATH=$PATH:$FABAN_INSTALL/bin
 #
 # OpenStack Configuration
 #
-[[ -s "$HOME/.openstack" ]] && source "$HOME/.openstack" 
+[[ -r "$HOME/.openstack" ]] && source "$HOME/.openstack" 
 
-#
-# GrapDat API Configuration
-#
-#[[ -s "$HOME/.graphdat.conf" ]] && source "$HOME/.graphdat.conf" 
 
 #
 # SNMP4J SMI Configuration
 #
-[[ -s "$HOME/.snmp4j" ]] && source "$HOME/.snmp4j" 
+[[ -r "$HOME/.snmp4j" ]] && source "$HOME/.snmp4j" 
 
 #
 # Totango Configuration
 #
-[[ -s "$HOME/.totango" ]] && source "$HOME/.totango" 
+[[ -r "$HOME/.totango" ]] && source "$HOME/.totango" 
 
 #
 # Ruby Version Manager
 #
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+[[ -r "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+### Go Language
+export GOPATH=$HOME/golang
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+
+#
+# Help function that activates the python
+# virtual environment in the current working
+# directory
+function python-activate() {
+
+[ -d ./python ] && . python/bin/activate
+
+}
+
+# Setting PATH for Python 2.7
+# The orginal version is saved in .bash_profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+export PATH
