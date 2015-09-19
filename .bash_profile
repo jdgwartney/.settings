@@ -7,8 +7,8 @@ set -o vi
 
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
-PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
-export PATH
+#PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+#export PATH
 
 export PATH=$PATH:/usr/local/sbin
 
@@ -141,24 +141,14 @@ alias swiss="cd $GIT_WORKING/swisscom"
 alias bvm="cd $GITS/boundary-vmware"
 alias ipmi="cd $GITS/boundary-ipmi-integration"
 alias dp="cd $GITS/boundary-plugin-demo"
+alias denv="cd $GITS/vagrant-boundary-demo"
+alias wb="cd $GITS/web-dashboard"
 
 
 alias jmx="cd $GITS/jmx-tutorial"
 
-export SVN_WORKING=$HOME/svn_working
-alias svnw="cd $SVN_WORKING"
-alias bp="cd /Users/davidg/Documents/workspace/bsdk/boundary-nagios-plugins"
-alias jmxa="cd $GITS/boundary-jmx-agent"
-alias apip="cd $GITS/boundary-python-plugin-framework"
-
-alias eclipse-old="open /Applications/eclipse/Eclipse.app/"
-alias eclipse="open /Applications/eclipse-luna/Eclipse.app/"
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
-
-alias cass="cd $GITS/vagrant-cassandra"
-
-alias pycharm="'/Applications/PyCharm CE.app/Contents/MacOS/pycharm'&"
 
 #
 # Tomcat Server Configuration
@@ -187,6 +177,7 @@ alias vmware="cd $GITS/boundary-plugin-vmware"
 alias weather="cd $GITS/boundary-plugin-weather"
 alias jpf="cd $GITS/boundary-plugin-framework-java"
 alias wpp="cd $GITS/boundary-plugin-windows-process"
+alias pvm="cd $GITS/boundary-vagrant-plugins"
 
 #
 # Setup Boundary CLI environment variables
@@ -270,13 +261,31 @@ export PATH=$PATH:$GOROOT/bin
 # Help function that activates the python
 # virtual environment in the current working
 # directory
-function python-activate() {
+function pact() {
 
-[ -d ./python ] && . python/bin/activate
+  if [ -d ./python ]
+  then
+    . python/bin/activate
+  elif [ -d $HOME/python ] 
+  then
+    . $HOME/python/bin/activate
+  else
+    :
+  fi
 
+  return 0
 }
+
+alias py="pact"
 
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
-PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
-export PATH
+#PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+#export PATH
+
+# Setting PATH for Python 3.4
+# The orginal version is saved in .bash_profile.pysave
+#PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
+#export PATH
+
+eval "$(chef shell-init bash)"
