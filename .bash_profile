@@ -262,13 +262,20 @@ export PATH=$PATH:$GOROOT/bin
 # virtual environment in the current working
 # directory
 function pact() {
+  typeset -r version=$1
+  if [ "$version" == "2" ]
+  then
+    typeset -r python_dir="python"
+  else
+    typeset -r python_dir="python3"
+  fi
 
-  if [ -d ./python ]
+  if [ -d "./$python_dir" ]
   then
-    . python/bin/activate
-  elif [ -d $HOME/python ] 
+    . $python_dir/bin/activate
+  elif [ -d $HOME/$python_dir ] 
   then
-    . $HOME/python/bin/activate
+    . $HOME/$python_dir/bin/activate
   else
     :
   fi
@@ -276,7 +283,9 @@ function pact() {
   return 0
 }
 
-alias py="pact"
+alias py="pact 2"
+alias py2="pact 2"
+alias py3="pact 3"
 
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
@@ -288,4 +297,8 @@ alias py="pact"
 #PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
 #export PATH
 
-eval "$(chef shell-init bash)"
+chef_installed=$(typeset chef)
+if [ -n "$chef_installed" ]
+then
+  eval "$(chef shell-init bash)"
+fi
