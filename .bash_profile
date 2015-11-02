@@ -27,8 +27,11 @@ export PATH=$PATH:$CASSANDRA_INSTALL/bin:$CASSANDRA_INSTALL/tools/bin
 #
 # Maven configuration
 #
-export M2_HOME=/Applications/apache-maven-3.2.1
-export PATH=$PATH:$M2_HOME/bin
+if [ -d /Applications/apache-maven-3.2.1 ]
+then
+  export M2_HOME=/Applications/apache-maven-3.2.1
+  export PATH=$PATH:$M2_HOME/bin
+fi
 
 #
 # Arcanist configuration
@@ -39,8 +42,8 @@ export PATH=$PATH:$ARCANIST_INSTALL/bin
 #
 # Java configuration
 #
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_20-ea/Contents/Home
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
 
 #
 # Gradle Configuration
@@ -134,8 +137,8 @@ alias be="cd $GIT_WORKING/boundary-event-plugins"
 alias bs="cd $GITS/camel-ping"
 alias bpd="cd $GIT_WORKING/boundary-plugin-dev"
 alias om="cd $GIT_WORKING/swisscom/openstack-monitoring"
-alias centos="cd $GIT_WORKING/boundary-event-sdk-centos"
-alias ubuntu="cd $GIT_WORKING/boundary-event-sdk-ubuntu"
+alias centos="cd $GITS/boundary-event-sdk-centos"
+alias ubuntu="cd $GITS/boundary-event-sdk-ubuntu"
 alias bcli="cd $GITS/boundary-api-cli"
 alias swiss="cd $GIT_WORKING/swisscom"
 alias bvm="cd $GITS/boundary-vmware"
@@ -149,6 +152,7 @@ alias jmx="cd $GITS/jmx-tutorial"
 
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
+alias intellij="open -a '/Applications/IntelliJ IDEA 14.app'"
 
 #
 # Tomcat Server Configuration
@@ -179,10 +183,7 @@ alias jpf="cd $GITS/boundary-plugin-framework-java"
 alias wpp="cd $GITS/boundary-plugin-windows-process"
 alias pvm="cd $GITS/boundary-vagrant-plugins"
 
-#
-# Setup Boundary CLI environment variables
-#
-[ -r "$HOME/git/boundary-api-cli/env.sh" ] && source "$HOME/git/boundary-api-cli/env.sh"
+
 
 
 #
@@ -197,11 +198,6 @@ alias android-eclipse="open $ANDROID_SDK/eclipse/Eclipse.app/"
 # Matlab
 #
 alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
-
-#
-# Boundary API Shell Configuration
-#
-[[ -r "$GITS/boundary-api-shell/env.sh" ]] && source "$GITS/boundary-api-shell/env.sh" 
 
 #
 # Boundary API Configuration
@@ -287,6 +283,13 @@ alias py="pact 2"
 alias py2="pact 2"
 alias py3="pact 3"
 
+#
+# Setup Boundary CLI environment variables
+#
+py 2>&1 > /dev/null
+TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
+[ -r "$TSP_CLI_ENV" ] && source "$TSP_CLI_ENV"
+
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
 #PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
@@ -302,3 +305,6 @@ if [ -n "$chef_installed" ]
 then
   eval "$(chef shell-init bash)"
 fi
+
+# added by Anaconda3 2.3.0 installer
+#export PATH="//anaconda/bin:$PATH"
