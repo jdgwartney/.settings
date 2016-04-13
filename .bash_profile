@@ -42,9 +42,15 @@ export PATH=$PATH:$ARCANIST_INSTALL/bin
 #
 # Java configuration
 #
-#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home
 #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
+#export PATH=$JAVA_HOME/bin:$PATH
 
+#
+# Go Configuration
+#
+
+export GOPATH=$HOME
 #
 # Gradle Configuration
 #
@@ -146,13 +152,14 @@ alias ipmi="cd $GITS/boundary-ipmi-integration"
 alias dp="cd $GITS/boundary-plugin-demo"
 alias denv="cd $GITS/vagrant-boundary-demo"
 alias wb="cd $GITS/web-dashboard"
+alias tsilab="cd $GITS/tsi-lab"
 
 
 alias jmx="cd $GITS/jmx-tutorial"
 
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
-alias intellij="open -a '/Applications/IntelliJ IDEA 14.app'"
+alias intellij="open -a '/Applications/IntelliJ IDEA 15.app'"
 
 #
 # Tomcat Server Configuration
@@ -182,6 +189,7 @@ alias weather="cd $GITS/boundary-plugin-weather"
 alias jpf="cd $GITS/boundary-plugin-framework-java"
 alias wpp="cd $GITS/boundary-plugin-windows-process"
 alias pvm="cd $GITS/boundary-vagrant-plugins"
+alias tslab="cd $GITS/tsi-lab"
 
 
 
@@ -284,7 +292,7 @@ alias py2="pact 2"
 alias py3="pact 3"
 
 #
-# Setup Boundary CLI environment variables
+# Setup TrueSight Pulse CLI environment variables
 #
 py 2>&1 > /dev/null
 TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
@@ -307,4 +315,5 @@ then
 fi
 
 # added by Anaconda3 2.3.0 installer
-#export PATH="//anaconda/bin:$PATH"
+export PATH="/anaconda/bin:$PATH"
+
