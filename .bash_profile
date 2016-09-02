@@ -16,46 +16,54 @@ export PATH=$PATH:/usr/local/sbin
 # Ant
 #
 ANT_HOME=/Applications/apache-ant-1.9.4
-PATH=$PATH:$ANT_HOME/bin
+if [ -d "$ANT_HOME" ]
+then
+    PATH=$PATH:$ANT_HOME/bin
+fi
 
 #
 # Cassandra
 #
 CASSANDRA_INSTALL=/Applications/dsc-cassandra-2.1.3
-export PATH=$PATH:$CASSANDRA_INSTALL/bin:$CASSANDRA_INSTALL/tools/bin
+if [ -d "$CASSANDRA_INSTALL" ]
+then
+    export PATH=$PATH:$CASSANDRA_INSTALL/bin:$CASSANDRA_INSTALL/tools/bin
+fi
 
 #
 # Maven configuration
 #
-if [ -d /Applications/apache-maven-3.2.1 ]
+MAVEN_INSTALL=/Applications/apache-maven-3.2.1 
+if [ -d "$MAVEN_INSTALL" ]
 then
   export M2_HOME=/Applications/apache-maven-3.2.1
   export PATH=$PATH:$M2_HOME/bin
 fi
 
 #
-# Arcanist configuration
-#
-export ARCANIST_INSTALL=$HOME/arcanist
-export PATH=$PATH:$ARCANIST_INSTALL/bin
-
-#
 # Java configuration
 #
-#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home
-#export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
-#export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
+if [ -d "$JAVA_HOME" ]
+then
+    export PATH=$JAVA_HOME/bin:$PATH
+fi
 
 #
 # Go Configuration
 #
 
 export GOPATH=$HOME
+
 #
 # Gradle Configuration
 #
 export GRADLE_HOME="/Applications/gradle-2.3"
-export PATH=$PATH:$GRADLE_HOME/bin
+if [ -d "$GRADLE_HOME" ]
+then
+    export PATH=$PATH:$GRADLE_HOME/bin
+fi
 
 #
 # EC2 Tools
@@ -87,7 +95,10 @@ export EC2_REGION=us-west-1
 # Chef
 #
 CHEF_INSTALL=/opt/chef/embedded
-export PATH=$CHEF_INSTALL/bin:$PATH
+if [ -d "$CHEF_INSTALL" ]
+then
+    export PATH=$CHEF_INSTALL/bin:$PATH
+fi
 
 #
 # Go language
@@ -100,27 +111,30 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 # Liquibase
 #
 LIQUIBASE_HOME=/Applications/liquibase
-export PATH=$PATH:$LIQUIBASE_HOME
-export PATH=$PATH:$LIQUIBASE_HOME/sdk
+if [ -d "$LIQUIBASE_HOME" ]
+then
+    export PATH=$PATH:$LIQUIBASE_HOME
+    export PATH=$PATH:$LIQUIBASE_HOME/sdk
+fi
 
 #
 # MySQL
 #
 
 export MYSQL_HOME=/usr/local/mysql
-export PATH=$PATH:$MYSQL_HOME/bin
+if [ -d "$MYSQL_HOME" ]
+then
+    export PATH=$PATH:$MYSQL_HOME/bin
+fi
 
 #
 # Mongo DB
 #
 export MONGO_DB_HOME="/Applications/mongodb-osx-x86_64-2.6.3"
-export PATH="$PATH:$MONGO_DB_HOME/bin"
-
-#
-# Nagios plugins
-#
-export PATH="$PATH:/usr/local/nagios/libexec"
-
+if [ -d "$MONGO_DB_HOME" ]
+then
+    export PATH="$PATH:$MONGO_DB_HOME/bin"
+fi
 
 #
 # Alias
@@ -191,6 +205,7 @@ alias wpp="cd $GITS/boundary-plugin-windows-process"
 alias pvm="cd $GITS/boundary-vagrant-plugins"
 alias tslab="cd $GITS/tsi-lab"
 
+alias import-io-extractor-csv="curl -s -L -H 'Accept-Encoding: gzip' --compressed "
 
 
 
@@ -211,6 +226,46 @@ alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
 # Boundary API Configuration
 #
 [[ -r "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
+
+#
+# Extract files
+#
+# unpack: Extract common file formats
+function unpack() {
+    if [[ -z "$@" ]]; then
+        echo " ${0##*/} <archive> - extract common file formats)" exit
+    fi
+    # Required program(s)
+    req_progs=(7z unrar unzip)
+    req_progs=(unzip)
+    for p in ${req_progs[@]}; do
+        hash "$p" 2>&- || \
+        { echo >&2 " Required program \"$p\" not installed."; return 1; }
+    done
+
+    # Test if file exists
+    if [ ! -f "$@" ]; then
+        echo "File "$@" doesn't exist" return
+    fi
+
+    # Extract file by using extension as reference
+    case "$@" in
+        *.7z ) 7z x "$@" ;;
+        *.tar.bz2 ) tar xvjf "$@" ;;
+        *.bz2 ) bunzip2 "$@" ;;
+        *.deb ) ar vx "$@" ;;
+        *.tar.gz ) tar xvf "$@" ;;
+        *.gz ) gunzip "$@" ;;
+        *.tar ) tar xvf "$@" ;;
+        *.tbz2 ) tar xvjf "$@" ;;
+        *.tar.xz ) tar xvf "$@" ;;
+        *.tgz ) tar xvzf "$@" ;;
+        *.rar ) unrar x "$@" ;;
+        *.zip ) unzip "$@" ;;
+        *.Z ) uncompress "$@" ;;
+        * ) echo " Unsupported file format" ;;
+    esac
+}
 
 #
 # Data Integration
@@ -315,5 +370,8 @@ then
 fi
 
 # added by Anaconda3 2.3.0 installer
-export PATH="/anaconda/bin:$PATH"
+if [ -d /anaconda/bin ]
+then
+    export PATH="/anaconda/bin:$PATH"
+fi
 
