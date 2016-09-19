@@ -78,18 +78,18 @@ export PATH=$PATH:$EC2_HOME/bin
 #
 # CloudWatch Tools
 #
-export AWS_CLOUDWATCH_HOME=/usr/local/ec2/CloudWatch-1.0.20.0
-export PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
-export AWS_CLOUDWATCH_URL=http://monitoring.us-west-1.amazonaws.com/
-export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
+# export AWS_CLOUDWATCH_HOME=/usr/local/ec2/CloudWatch-1.0.20.0
+# export PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
+# export AWS_CLOUDWATCH_URL=http://monitoring.us-west-1.amazonaws.com/
+# export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
 
 #
 # RDS Tools
 #
-export AWS_RDS_HOME="/Applications/RDSCli-1.18.001"
-export PATH=$PATH:$AWS_RDS_HOME/bin
-export AWS_CREDENTIAL_FILE=$HOME/.rds-credentials
-export EC2_REGION=us-west-1
+# export AWS_RDS_HOME="/Applications/RDSCli-1.18.001"
+# export PATH=$PATH:$AWS_RDS_HOME/bin
+# export AWS_CREDENTIAL_FILE=$HOME/.rds-credentials
+# export EC2_REGION=us-west-1
 
 #
 # Chef
@@ -187,27 +187,94 @@ alias tomshutdown="$TOMCAT_BIN/shutdown.sh"
 export PATH=/usr/local/bin:$PATH
 
 #
-# Plugins
+# Import.io
 #
-alias bps="cd $GITS/boundary-plugin-shell"
-alias cas="cd $GITS/boundary-plugin-cassandra"
-alias rabbitmq="cd $GITS/boundary-plugin-rabbitmq"
-alias atc="cd $GITS/boundary-plugin-apache-tomcat"
-alias jvm="cd $GITS/boundary-plugin-jvm"
-alias postp="cd $GITS/boundary-plugin-postgresql"
-alias ticker="cd $GITS/boundary-plugin-ticker"
-alias redis="cd $GITS/boundary-plugin-redis"
-alias aweb="cd $GITS/boundary-action-handler"
-alias vmware="cd $GITS/boundary-plugin-vmware"
-alias weather="cd $GITS/boundary-plugin-weather"
-alias jpf="cd $GITS/boundary-plugin-framework-java"
-alias wpp="cd $GITS/boundary-plugin-windows-process"
-alias pvm="cd $GITS/boundary-vagrant-plugins"
-alias tslab="cd $GITS/tsi-lab"
 
-alias import-io-extractor-csv="curl -s -L -H 'Accept-Encoding: gzip' --compressed "
+IMPORT_IO_RC=$HOME/.import-io
+[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
 
 
+IMPORT_IO_FUNC=$HOME/.import-io.sh
+[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
+
+io-extractor-url-query() {
+    typeset -r extractor_id=$1
+    typeset -r url=$2
+    typeset -r query_url=$(echo $url | python -c "import urllib; import sys; print(urllib.quote_plus(sys.stdin.readlines()[0]))")
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-url-query extractor_id url"
+        return 1
+    fi
+    curl -s "https://extraction.import.io/query/extractor/${extractor_id}?_apikey=$IMPORT_IO_API_KEY&url=$query_url" | jq .
+}
+
+io-extractor-url-list-get() {
+    if [ $# -ne 1 ]
+    then
+       echo "usage: io-extractor-url-list extractor_id"
+       return 1
+    fi
+    typeset -r extractor_id=$1
+    typeset -r url_list_id=$(io-extractor-get $extractor_id | jq ".urlList" | tr -d '"')
+
+    curl -s -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
+    return 0
+}
+
+io-extractor-url-list-put() {
+    typeset -r extractor_id=$1
+    typeset -r url_list_file=$2
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-url-list-put extractor_id url_list_file"
+	return 1
+    fi
+
+    curl -X PUT -s -H 'Content-type: text/plain' "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList?_apikey=$IMPORT_IO_API_KEY" -T "$url_list_file" | jq .
+}
+
+io-extractor-csv() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-extractor-csv extractor_id"
+	return 1
+    fi
+    curl -s -L -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
+}
+
+
+io-extractor-open() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-extractor-open extractor_id"
+	return 1
+    fi
+    open https://dash.import.io/$extractor_id
+}
+
+io-extractor-edit() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-extractor-edit extractor_id"
+	return 1
+    fi
+    open "http://lightning.import.io/results?extractorGuid=$extractor_id"
+}
+
+io-extractor-get() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-extractor-get extractor_id"
+	return 1
+    fi
+    curl -X GET -s "https://store.import.io/store/extractor/$extractor_id?_apikey=$IMPORT_IO_API_KEY" | jq .
+}
 
 #
 # Android SDK Setup
@@ -226,6 +293,10 @@ alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
 # Boundary API Configuration
 #
 [[ -r "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
+
+function path() {
+  echo $PATH | tr : '\n' | sort
+}
 
 #
 # Extract files
@@ -352,6 +423,7 @@ alias py3="pact 3"
 py 2>&1 > /dev/null
 TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
 [ -r "$TSP_CLI_ENV" ] && source "$TSP_CLI_ENV"
+
 
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
