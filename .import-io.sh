@@ -2,6 +2,29 @@
 # Import.io
 #
 
+# Using these shell functions required the following command line tools be present in your
+# environment and your PATH:
+#
+#  bash
+#  curl
+#  jq => https://stedolan.github.io/jq/
+#  open Mac OS X helper command line tool that can launch the active browser (see man -s 1 open)
+#
+# Configuration
+# 
+# 1. Add an environment variable to .bash_profile IMPORT_IO_API_KEY that contains
+#    your import-io API Key
+#
+# 2. Add this file (.import-io.sh) contains shell functions to your file system in known location
+#
+# Example configuration in my current ~/.bash_profile:
+#
+#     IMPORT_IO_RC=$HOME/.import-io
+#     [ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC"
+# 
+#     IMPORT_IO_FUNC=$HOME/.import-io.sh
+#     [ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC"
+
 io-extractor-url-query() {
     typeset -r extractor_id=$1
     typeset -r url=$2
