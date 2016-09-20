@@ -17,7 +17,12 @@
 #
 # 2. Add this file (.import-io.sh) contains shell functions to your file system in known location
 #
-# Example configuration in my current ~/.bash_profile:
+# Example configuration in my current ~/.bash_profile which consists of a file ~/.import-io that
+# contains:
+#
+#    export IMPORT_IO_API_KEY=<import.io api key>
+#
+# The following are then used to include the environment variable definition and shell functions:
 #
 #     IMPORT_IO_RC=$HOME/.import-io
 #     [ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC"
