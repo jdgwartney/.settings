@@ -2,13 +2,6 @@
 # Import.io
 #
 
-IMPORT_IO_RC=$HOME/.import-io
-[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
-
-
-IMPORT_IO_FUNC=$HOME/.import-io.sh
-[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
-
 io-extractor-url-query() {
     typeset -r extractor_id=$1
     typeset -r url=$2
@@ -19,7 +12,17 @@ io-extractor-url-query() {
         echo "usage: io-extractor-url-query extractor_id url"
         return 1
     fi
-    curl -s "https://extraction.import.io/query/extractor/${extractor_id}?_apikey=$IMPORT_IO_API_KEY&url=$query_url" | jq .
+    curl -s -X GET "https://extraction.import.io/query/extractor/${extractor_id}?_apikey=$IMPORT_IO_API_KEY&url=$query_url" | jq .
+}
+
+io-extractor-start() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+       echo "usage: io-extractor-url-list extractor_id"
+       return 1
+    fi
+    curl -s -X POST "https://run.import.io/${extractor_id}/start?_apikey=$IMPORT_IO_API_KEY" | jq .
 }
 
 io-extractor-url-list-get() {
@@ -31,7 +34,7 @@ io-extractor-url-list-get() {
     typeset -r extractor_id=$1
     typeset -r url_list_id=$(io-extractor-get $extractor_id | jq ".urlList" | tr -d '"')
 
-    curl -s -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
     return 0
 }
 
@@ -54,7 +57,7 @@ io-extractor-csv() {
         echo "usage: io-extractor-csv extractor_id"
 	return 1
     fi
-    curl -s -L -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
+    curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
 }
 
 
