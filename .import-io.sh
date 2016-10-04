@@ -30,6 +30,39 @@
 #     IMPORT_IO_FUNC=$HOME/.import-io.sh
 #     [ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC"
 
+
+io-extractor-crawl-run() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -lt 1 ]
+    then
+        echo "usage: io-extractor-crawl-run extractor_id craw_run_id"
+        return 1
+    fi
+
+    if [ $# -eq 2 ]
+    then 
+        curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=1&_perPage=30&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
+    else
+       curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=1&_perPage=30&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
+    fi
+
+}
+
+io-extractor-crawl-run-state() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-crawl-run-state extractor_id craw_run_id"
+        return 1
+    fi
+
+    io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq .fields.state | tr -d '"'
+}
+
 io-extractor-url-query() {
     typeset -r extractor_id=$1
     typeset -r url=$2
