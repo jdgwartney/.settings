@@ -122,7 +122,7 @@ io-extractor-csv() {
 }
 
 
-io-extractor-open() {
+io-extractor-edit() {
     typeset -r extractor_id=$1
     if [ $# -ne 1 ]
     then
@@ -132,14 +132,15 @@ io-extractor-open() {
     open https://dash.import.io/$extractor_id
 }
 
-io-extractor-edit() {
-    typeset -r extractor_id=$1
+io-extractor-new() {
+    typeset -r url=$1
+    typeset -r query_url=$(echo $url | python -c "import urllib; import sys; print(urllib.quote_plus(sys.stdin.readlines()[0]))")
     if [ $# -ne 1 ]
     then
-        echo "usage: io-extractor-edit extractor_id"
+        echo "usage: io-extractor-edit url"
 	return 1
     fi
-    open "http://lightning.import.io/results?extractorGuid=$extractor_id"
+    open "http://lightning.import.io/results?url=$query_url"
 }
 
 io-extractor-get() {
