@@ -5,11 +5,6 @@
 # Enable command line editing with VI
 set -o vi
 
-# Setting PATH for Python 2.7
-# The orginal version is saved in .bash_profile.pysave
-#PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
-#export PATH
-
 export PATH=$PATH:/usr/local/sbin
 
 #
@@ -33,10 +28,11 @@ fi
 #
 # Maven configuration
 #
-MAVEN_INSTALL=/Applications/apache-maven-3.2.1 
+MAVEN_VERSION=3.2.1
+MAVEN_INSTALL=/Applications/apache-maven-${MAVEN_VERSION}
 if [ -d "$MAVEN_INSTALL" ]
 then
-  export M2_HOME=/Applications/apache-maven-3.2.1
+  export M2_HOME="$MAVEN_INSTALL"
   export PATH=$PATH:$M2_HOME/bin
 fi
 
@@ -51,10 +47,13 @@ then
 fi
 
 #
-# Go Configuration
+# Go language
 #
 
+export GOROOT=/usr/local/go
 export GOPATH=$HOME
+export GOPATH=$HOME/gocode
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 #
 # Gradle Configuration
@@ -64,48 +63,6 @@ if [ -d "$GRADLE_HOME" ]
 then
     export PATH=$PATH:$GRADLE_HOME/bin
 fi
-
-#
-# EC2 Tools
-#
-export EC2_HOME=/usr/local/ec2/ec2-api-tools-1.6.12.2
-export PATH=$PATH:$EC2_HOME/bin
-
-[[ -r $HOME/.ec2-credentials ]] && source $HOME/.ec2-credentials
-
-#export EC2_URL=https://ec2.us-east-1.amazonaws.com
-
-#
-# CloudWatch Tools
-#
-# export AWS_CLOUDWATCH_HOME=/usr/local/ec2/CloudWatch-1.0.20.0
-# export PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
-# export AWS_CLOUDWATCH_URL=http://monitoring.us-west-1.amazonaws.com/
-# export AWS_CREDENTIAL_FILE=$HOME/.cloudwatch-credentials
-
-#
-# RDS Tools
-#
-# export AWS_RDS_HOME="/Applications/RDSCli-1.18.001"
-# export PATH=$PATH:$AWS_RDS_HOME/bin
-# export AWS_CREDENTIAL_FILE=$HOME/.rds-credentials
-# export EC2_REGION=us-west-1
-
-#
-# Chef
-#
-CHEF_INSTALL=/opt/chef/embedded
-if [ -d "$CHEF_INSTALL" ]
-then
-    export PATH=$CHEF_INSTALL/bin:$PATH
-fi
-
-#
-# Go language
-#
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/gocode
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 #
 # Liquibase
@@ -137,48 +94,24 @@ then
 fi
 
 #
-# Alias
-#
-
-#
 # Shortcuts to GIT repositories
 #
-export GIT_WORKING=$HOME/git_working
 export GITS=$HOME/git
-export GGITS=$HOME/ggit
-alias gitw="cd $GIT_WORKING"
 alias gits="cd $GITS"
-alias ggit="cd $GGITS"
-alias myapp="cd $GITS/my-app"
-alias ba="cd $GITS/boundary-service-database/api"
-alias bc="cd $GITS/boundary-event-sdk"
-alias bd="cd $GITS/boundary-service-database/db"
-alias be="cd $GIT_WORKING/boundary-event-plugins"
-alias bs="cd $GITS/camel-ping"
-alias bpd="cd $GIT_WORKING/boundary-plugin-dev"
-alias om="cd $GIT_WORKING/swisscom/openstack-monitoring"
-alias centos="cd $GITS/boundary-event-sdk-centos"
-alias ubuntu="cd $GITS/boundary-event-sdk-ubuntu"
-alias bcli="cd $GITS/boundary-api-cli"
-alias swiss="cd $GIT_WORKING/swisscom"
-alias bvm="cd $GITS/boundary-vmware"
-alias ipmi="cd $GITS/boundary-ipmi-integration"
-alias dp="cd $GITS/boundary-plugin-demo"
-alias denv="cd $GITS/vagrant-boundary-demo"
-alias wb="cd $GITS/web-dashboard"
-alias tsilab="cd $GITS/tsi-lab"
 
-
-alias jmx="cd $GITS/jmx-tutorial"
 
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
-alias intellij="open -a '/Applications/IntelliJ IDEA 15.app'"
+alias intellij="open -a '/Applications/IntelliJ IDEA 16.app'"
+alias pycharm="open -a '/Applications/PyCharm.app'"
+
+alias open-dir="open file://$(pwd)"
 
 #
 # Tomcat Server Configuration
 #
-TOMCAT_HOME=/Applications/apache-tomcat-7.0.53
+TOMCAT_VERSION=/Applications/apache-tomcat-7.0.53
+TOMCAT_HOME=/Applications/apache-tomcat-${TOMCAT_VERSION}
 TOMCAT_BIN="$TOMCAT_HOME/bin"
 alias tomstartup="$TOMCAT_BIN/startup.sh"
 alias tomshutdown="$TOMCAT_BIN/shutdown.sh"
@@ -216,7 +149,7 @@ alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
 [[ -r "$HOME/.boundary/config" ]] && source "$HOME/.boundary/config" 
 
 function path() {
-  echo $PATH | tr : '\n' | sort
+  echo $PATH | tr : '\n' | awk '{ print $0}'
 }
 
 #
@@ -271,13 +204,6 @@ function spoon() {
 }
 
 #
-# Faban
-#
-export FABAN_INSTALL=/Applications/faban
-export PATH=$PATH:$FABAN_INSTALL/bin
-
-
-#
 # OpenStack Configuration
 #
 [[ -r "$HOME/.openstack" ]] && source "$HOME/.openstack" 
@@ -299,8 +225,6 @@ export PATH=$PATH:$FABAN_INSTALL/bin
 [[ -r "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
 
 ### Go Language
 export GOPATH=$HOME/golang
@@ -334,9 +258,47 @@ function pact() {
   return 0
 }
 
-alias py="pact 2"
-alias py2="pact 2"
-alias py3="pact 3"
+py() {
+    pact 2
+}
+
+py2() {
+    pact 2
+}
+
+py3() {
+    pact 3
+}
+
+#
+# Setup TrueSight Pulse CLI environment variables
+#
+py 2>&1 > /dev/null
+TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
+[ -r "$TSP_CLI_ENV" ] && source "$TSP_CLI_ENV"
+
+
+# Setting PATH for Python 2.7
+# The orginal version is saved in .bash_profile.pysave
+#PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+#export PATH
+
+# Setting PATH for Python 3.4
+# The orginal version is saved in .bash_profile.pysave
+#PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
+#export PATH
+
+chef_installed=$(typeset chef)
+if [ -n "$chef_installed" ]
+then
+  eval "$(chef shell-init bash)"
+fi
+
+# added by Anaconda3 2.3.0 installer
+if [ -d /anaconda/bin ]
+then
+    export PATH="/anaconda/bin:$PATH"
+fi
 
 #
 # Setup TrueSight Pulse CLI environment variables
