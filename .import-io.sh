@@ -80,7 +80,7 @@ io-extractor-start() {
     typeset -r extractor_id=$1
     if [ $# -ne 1 ]
     then
-       echo "usage: io-extractor-url-list extractor_id"
+       echo "usage: io-extractor-start extractor_id"
        return 1
     fi
     curl -s -X POST "https://run.import.io/${extractor_id}/start?_apikey=$IMPORT_IO_API_KEY" | jq .
@@ -89,7 +89,7 @@ io-extractor-start() {
 io-extractor-url-list-get() {
     if [ $# -ne 1 ]
     then
-       echo "usage: io-extractor-url-list extractor_id"
+       echo "usage: io-extractor-url-list-get extractor_id"
        return 1
     fi
     typeset -r extractor_id=$1
@@ -98,6 +98,20 @@ io-extractor-url-list-get() {
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
     return 0
 }
+
+io-extractor-training-get() {
+    if [ $# -ne 1 ]
+    then
+       echo "usage: io-extractor-url-list extractor_id"
+       return 1
+    fi
+    typeset -r extractor_id=$1
+    typeset -r training_id=$(io-extractor-get $extractor_id | jq ".training" | tr -d '"')
+
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/training/${training_id}?_apikey=$IMPORT_IO_API_KEY" | jq .
+    return 0
+}
+
 
 io-extractor-url-list-put() {
     typeset -r extractor_id=$1
