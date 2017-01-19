@@ -102,7 +102,7 @@ io-extractor-url-list-get() {
 io-extractor-training-get() {
     if [ $# -ne 1 ]
     then
-       echo "usage: io-extractor-url-list extractor_id"
+       echo "usage: io-extractor-training-get extractor_id"
        return 1
     fi
     typeset -r extractor_id=$1
@@ -112,6 +112,18 @@ io-extractor-training-get() {
     return 0
 }
 
+io-extractor-config-get() {
+    if [ $# -ne 1 ]
+    then
+       echo "usage: io-extractor-config-get extractor_id"
+       return 1
+    fi
+    typeset -r extractor_id=$1
+    typeset -r config_id=$(io-extractor-get $extractor_id | jq ".latestConfigId" | tr -d '"')
+
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/configuration/${config_id}?_apikey=$IMPORT_IO_API_KEY" | jq .
+    return 0
+}
 
 io-extractor-url-list-put() {
     typeset -r extractor_id=$1
@@ -133,6 +145,16 @@ io-extractor-csv() {
 	return 1
     fi
     curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
+}
+
+io-extractor-json() {
+    typeset -r extractor_id=$1
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-extractor-json extractor_id"
+	return 1
+    fi
+    curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/json/latest?_apikey=$IMPORT_IO_API_KEY"
 }
 
 
