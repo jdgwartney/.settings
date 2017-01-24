@@ -188,3 +188,12 @@ io-extractor-get() {
     fi
     curl -X GET -s "https://store.import.io/store/extractor/$extractor_id?_apikey=$IMPORT_IO_API_KEY" | jq .
 }
+
+io-extractor-list() {
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+do
+    curl -X GET -s "https://store.import.io/store/extractor/_search?_sort=_meta.creationTimestamp&_mine=true&q=_missing_%3Aarchived%20OR%20archived%3Afalse&_page=$i&_apikey=$IMPORT_IO_API_KEY" | jq .
+done
+}
+
+
