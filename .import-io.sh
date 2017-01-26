@@ -50,6 +50,21 @@ io-extractor-crawl-run() {
 
 }
 
+io-extractor-crawl-run-csv() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-crawl-run-csv extractor_id craw_run_id"
+        return 1
+    fi
+
+    csv_id=$(io-extractor-crawl-run $extractor_id  $crawl_run_id | jq '.fields.csv' | tr -d '"')
+
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/crawlRun/$crawl_run_id/_attachment/csv/$csv_id?_apikey=$IMPORT_IO_API_KEY"
+}
+
 io-extractor-crawl-run-state() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
