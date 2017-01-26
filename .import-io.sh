@@ -161,7 +161,7 @@ io-extractor-url-list-put() {
     if [ $# -ne 2 ]
     then
         echo "usage: io-extractor-url-list-put extractor_id url_list_file"
-	return 1
+	    return 1
     fi
 
     curl -X PUT -s -H 'Content-type: text/plain' "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList?_apikey=$IMPORT_IO_API_KEY" -T "$url_list_file" | jq .
@@ -172,7 +172,7 @@ io-extractor-csv() {
     if [ $# -ne 1 ]
     then
         echo "usage: io-extractor-csv extractor_id"
-	return 1
+	    return 1
     fi
     curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
 }
@@ -182,7 +182,7 @@ io-extractor-json() {
     if [ $# -ne 1 ]
     then
         echo "usage: io-extractor-json extractor_id"
-	return 1
+	    return 1
     fi
     curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/json/latest?_apikey=$IMPORT_IO_API_KEY"
 }
@@ -193,7 +193,7 @@ io-extractor-edit() {
     if [ $# -ne 1 ]
     then
         echo "usage: io-extractor-open extractor_id"
-	return 1
+	    return 1
     fi
     open https://dash.import.io/$extractor_id
 }
@@ -204,7 +204,7 @@ io-extractor-new() {
     if [ $# -ne 1 ]
     then
         echo "usage: io-extractor-edit url"
-	return 1
+	    return 1
     fi
     open "http://lightning.import.io/results?url=$query_url"
 }
@@ -214,16 +214,31 @@ io-extractor-get() {
     if [ $# -ne 1 ]
     then
         echo "usage: io-extractor-get extractor_id"
-	return 1
+	    return 1
     fi
     curl -X GET -s "https://store.import.io/store/extractor/$extractor_id?_apikey=$IMPORT_IO_API_KEY" | jq .
 }
 
 io-extractor-list() {
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-do
-    curl -X GET -s "https://store.import.io/store/extractor/_search?_sort=_meta.creationTimestamp&_mine=true&q=_missing_%3Aarchived%20OR%20archived%3Afalse&_page=$i&_apikey=$IMPORT_IO_API_KEY" | jq .
-done
+    
+    typeset -r search_value="$1"
+    typeset -r command="https://store.import.io/store/extractor/_search?_sort=_meta.creationTimestamp&_mine=true&q=_missing_%3Aarchived%20OR%20archived%3Afalse&_apikey=$IMPORT_IO_API_KEY"
+    typeset -r filter="jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}'"
+
+    if [ $# -gt 1 ]
+    then
+        echo "usage: io-extractor-list [pattern]"
+	    return 1
+    fi
+    for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+    do
+        if [ -z "$search_value" ]
+        then
+            curl -s -X GET "${command}&page=${i}" | jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}'
+        else
+            curl -s -X GET "${command}&page=${i}" | jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}' | grep -A 2 -B 1 ${search_value} | grep -v -- '--' | jq .
+        fi
+    done
 }
 
 
