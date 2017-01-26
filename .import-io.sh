@@ -34,6 +34,8 @@
 io-extractor-crawl-run() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
+    typeset -r page=1
+    typeset -r per_page=100
 
     if [ $# -lt 1 ]
     then
@@ -43,10 +45,23 @@ io-extractor-crawl-run() {
 
     if [ $# -eq 2 ]
     then 
-        curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=1&_perPage=30&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
+        curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
     else
-       curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=1&_perPage=30&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
+       curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
     fi
+
+}
+
+io-extractor-crawl-run-history() {
+    typeset -r extractor_id=$1
+
+    if [ $# -lt 1 ]
+    then
+        echo "usage: io-extractor-crawl-run-history extractor_id craw_run_id page"
+        return 1
+    fi
+
+    io-extractor-crawl-run $extractor_id | jq '.hits.hits | .[] | .fields | {state: .state, started: (.startedAt/1000|todateiso8601), stopped: (.stoppedAt/1000|todateiso8601), guid: .csv, urls: .totalUrlCount, successes: .successUrlCount, failed: .failedUrlCount, rows: .rowCount}'
 
 }
 
