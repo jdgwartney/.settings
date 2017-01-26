@@ -61,7 +61,7 @@ io-extractor-crawl-run-history() {
         return 1
     fi
 
-    io-extractor-crawl-run $extractor_id | jq '.hits.hits | .[] | .fields | {state: .state, started: (.startedAt/1000|todateiso8601), stopped: (.stoppedAt/1000|todateiso8601), guid: .csv, urls: .totalUrlCount, successes: .successUrlCount, failed: .failedUrlCount, rows: .rowCount}'
+    io-extractor-crawl-run $extractor_id | jq '.hits.hits | .[] | .fields | {state: .state, started: (.startedAt/1000|todateiso8601), stopped: (.stoppedAt/1000|todateiso8601), guid: .csv, urls: .totalUrlCount, successes: .successUrlCount, failed: .failedUrlCount, rows: .rowCount, csv: .csv, json: .json, log: .log}'
 
 }
 
