@@ -1,0 +1,3 @@
+GIT_WORKING=$HOME/git
+alias ebay="cd $GIT_WORKING/postsales_ebay"
+alias ebaybe="cd $GIT_WORKING/postsales_ebay_be"
