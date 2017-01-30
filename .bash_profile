@@ -307,6 +307,12 @@ py 2>&1 > /dev/null
 TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
 [ -r "$TSP_CLI_ENV" ] && source "$TSP_CLI_ENV"
 
+#
+# Alias configuration
+#
+ALIAS_FILE=$HOME/.alias
+[ -r "$ALIAS_FILE" ] && source "$ALIAS_FILE"
+
 
 # Setting PATH for Python 2.7
 # The orginal version is saved in .bash_profile.pysave
