@@ -1,3 +1,4 @@
 GIT_WORKING=$HOME/git
-alias ebay="cd $GIT_WORKING/postsales_ebay"
+alias ebay="cd $GIT_WORKING/postsales_ebay; deactivate ; py3"
 alias ebaybe="cd $GIT_WORKING/postsales_ebay_be"
+alias clearmetal="cd $GIT_WORKING/presales_clearmetal"
