@@ -35,20 +35,21 @@ io-extractor-crawl-run() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
     typeset -r page=1
-    typeset -r per_page=100
+    typeset -r per_page=30
 
     if [ $# -lt 1 ]
     then
         echo "usage: io-extractor-crawl-run extractor_id craw_run_id"
         return 1
     fi
-
+set -x
     if [ $# -eq 2 ]
     then 
         curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
     else
        curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
     fi
+set +x
 
 }
 
@@ -74,10 +75,10 @@ io-extractor-crawl-run-csv() {
         echo "usage: io-extractor-crawl-run-csv extractor_id craw_run_id"
         return 1
     fi
-
-    csv_id=$(io-extractor-crawl-run $extractor_id  $crawl_run_id | jq '.fields.csv' | tr -d '"')
-
+set -x
+    csv_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.csv' | tr -d '"')
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/crawlRun/$crawl_run_id/_attachment/csv/$csv_id?_apikey=$IMPORT_IO_API_KEY"
+set +x
 }
 
 io-extractor-crawl-run-state() {
@@ -217,6 +218,17 @@ io-extractor-get() {
 	    return 1
     fi
     curl -X GET -s "https://store.import.io/store/extractor/$extractor_id?_apikey=$IMPORT_IO_API_KEY" | jq .
+}
+
+io-extractor-change-owner() {
+    typeset -r extractor_id=$1
+    typeset -r new_owner_id=$2
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-change-owner extractor_id new_owner_id"
+	    return 1
+    fi
+    curl -X GET -s "https://store.import.io/store/extractor/${extractor_id}?_apikey=$IMPORT_IO_API_KEY&newOwner=${new_owner_id}" | jq .
 }
 
 io-extractor-list() {
