@@ -42,7 +42,7 @@ io-extractor-crawl-run() {
         echo "usage: io-extractor-crawl-run extractor_id craw_run_id"
         return 1
     fi
-set -x
+
     if [ $# -eq 2 ]
     then 
         curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
@@ -66,6 +66,32 @@ io-extractor-crawl-run-history() {
 
 }
 
+io-extractor-crawl-run-log() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-crawl-log extractor_id craw_run_id"
+        return 1
+    fi
+    log_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.log' | tr -d '"')
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/crawlRun/$crawl_run_id/_attachment/log/$log_id?_apikey=$IMPORT_IO_API_KEY"
+}
+
+io-extractor-crawl-run-url-list() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-crawl-url-list extractor_id craw_run_id"
+        return 1
+    fi
+    url_list_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.urlListId' | tr -d '"')
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/crawlRun/$crawl_run_id/_attachment/urlList/$url_list_id?_apikey=$IMPORT_IO_API_KEY"
+}
+
 io-extractor-crawl-run-csv() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
@@ -75,10 +101,8 @@ io-extractor-crawl-run-csv() {
         echo "usage: io-extractor-crawl-run-csv extractor_id craw_run_id"
         return 1
     fi
-set -x
     csv_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.csv' | tr -d '"')
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/crawlRun/$crawl_run_id/_attachment/csv/$csv_id?_apikey=$IMPORT_IO_API_KEY"
-set +x
 }
 
 io-extractor-crawl-run-state() {
