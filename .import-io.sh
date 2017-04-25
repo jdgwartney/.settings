@@ -277,4 +277,22 @@ io-extractor-list() {
     done
 }
 
+io-extractor-scheduled() {
+    for id in $(curl -s -X GET --header 'Accept: application/json' "https://schedule.import.io/extractor?_apikey=$IMPORT_IO_API_KEY" | jq '.[] | .extractorId' | tr -d '"')
+    do
+        io-extractor-get $id | jq '.name' | tr -d '"'
+    done
+}
+
+io-crawl-run-change-owner() {
+    typeset -r crawl_run_id=$1
+    typeset -r new_owner_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-crawlrun-change-owner crawl_run_id new_owner_id"
+	    return 1
+    fi
+    curl -s -X PATCH "https://store.import.io/crawlrun/${crawl_run_id}?newOwner=${new_owner_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
+}
 
