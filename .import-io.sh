@@ -142,13 +142,19 @@ io-extractor-start() {
 }
 
 io-extractor-url-list-get() {
-    if [ $# -ne 1 ]
+    if [ $# -gt 2 ]
     then
        echo "usage: io-extractor-url-list-get extractor_id"
        return 1
     fi
     typeset -r extractor_id=$1
-    typeset -r url_list_id=$(io-extractor-get $extractor_id | jq ".urlList" | tr -d '"')
+    typeset -r crawl_run_id=$2
+    if [ ! -z "$crawl_run_id" ]
+    then
+        url_list_id=$(io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq '.fields | .urlListId' | tr -d '"')
+    else
+        url_list_id=$(io-extractor-get $extractor_id | jq ".urlList" | tr -d '"')
+    fi
 
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
     return 0
@@ -177,6 +183,18 @@ io-extractor-config-get() {
     typeset -r config_id=$(io-extractor-get $extractor_id | jq ".latestConfigId" | tr -d '"')
 
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/configuration/${config_id}?_apikey=$IMPORT_IO_API_KEY" | jq .
+    return 0
+}
+
+io-extractor-log-get() {
+    if [ $# -ne 1 ]
+    then
+       echo "usage: io-extractor-log-get extractor_id"
+       return 1
+    fi
+    typeset -r extractor_id=$1
+
+    curl -L -X GET -s -H "Accept-Encoding: gzip" --compressed "https://data.import.io/extractor/${extractor_id}/log/latest?_apikey=$IMPORT_IO_API_KEY"
     return 0
 }
 
