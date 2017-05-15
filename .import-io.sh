@@ -149,11 +149,11 @@ io-extractor-url-list-get() {
     fi
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
-    if [ ! -z "$crawl_run_id" ]
+    if [ -z ${crawl_run_id} ]
     then
-        url_list_id=$(io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq '.fields | .urlListId' | tr -d '"')
-    else
         url_list_id=$(io-extractor-get $extractor_id | jq ".urlList" | tr -d '"')
+    else
+        url_list_id=$(io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq '.fields | .urlListId' | tr -d '"')
     fi
 
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/extractor/${extractor_id}/_attachment/urlList/${url_list_id}?_apikey=$IMPORT_IO_API_KEY"
