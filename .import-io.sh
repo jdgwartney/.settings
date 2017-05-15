@@ -144,7 +144,7 @@ io-extractor-start() {
 io-extractor-url-list-get() {
     if [ $# -gt 2 ]
     then
-       echo "usage: io-extractor-url-list-get extractor_id"
+       echo "usage: io-extractor-url-list-get extractor_id [crawl_run_id]"
        return 1
     fi
     typeset -r extractor_id=$1
@@ -212,12 +212,22 @@ io-extractor-url-list-put() {
 
 io-extractor-csv() {
     typeset -r extractor_id=$1
-    if [ $# -ne 1 ]
+    typeset -r crawl_run_id=$2
+    if [ $# -eq 2 -o $# -eq 1 ]
     then
-        echo "usage: io-extractor-csv extractor_id"
+        :
+    else
+        echo "usage: io-extractor-csv extractor_id [crawl_run_id]"
 	    return 1
     fi
-    curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
+
+    if [ -z ${crawl_run_id} ]
+    then
+        curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/csv/latest?_apikey=$IMPORT_IO_API_KEY"
+    else
+        csv_id=$(io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq '.fields | .csv' | tr -d '"')
+        curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/crawlRun/$crawl_run_id/_attachment/csv/$csv_id?_apikey=$IMPORT_IO_API_KEY"
+    fi
 }
 
 io-extractor-json() {
