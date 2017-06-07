@@ -39,8 +39,7 @@ fi
 #
 # Java configuration
 #
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_101.jdk/Contents/Home
 if [ -d "$JAVA_HOME" ]
 then
     export PATH=$JAVA_HOME/bin:$PATH
@@ -83,6 +82,11 @@ if [ -d "$MYSQL_HOME" ]
 then
     export PATH=$PATH:$MYSQL_HOME/bin
 fi
+
+#
+# PostgreSQL
+#
+#sudo mkdir -p /etc/paths.d && echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
 
 #
 # Mongo DB
@@ -339,3 +343,10 @@ fi
 
 # added by Anaconda3 4.2.0 installer
 export PATH="//anaconda/bin:$PATH"
+source /usr/local/opt/autoenv/activate.sh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc'; fi

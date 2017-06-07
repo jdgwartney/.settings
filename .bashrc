@@ -15,3 +15,6 @@ IMPORT_IO_RC=$HOME/.import-io
 IMPORT_IO_FUNC=$HOME/.import-io.sh
 [ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC"
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
