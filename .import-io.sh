@@ -31,6 +31,7 @@
 #     [ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC"
 
 
+
 io-extractor-crawl-run() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
@@ -330,6 +331,16 @@ io-extractor-scheduled() {
     do
         io-extractor-get $id | jq '.name' | tr -d '"'
     done
+}
+
+io-crawlrun-get() {
+    typeset -r crawl_run_id="$1"
+    if [ $# -ne 1 ]
+    then
+        echo "usage: io-crawl-run-get crawl_run_id"
+	    return 1
+    fi
+    curl -s "https://store.import.io/crawlrun/${crawl_run_id}?_apikey=${IMPORT_IO_API_KEY}" | jq .
 }
 
 io-crawl-run-change-owner() {
