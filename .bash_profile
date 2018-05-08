@@ -1,4 +1,4 @@
-#
+
 # Bash Shell Settings
 #
 
@@ -15,6 +15,14 @@ if [ -d "$ANT_HOME" ]
 then
     PATH=$PATH:$ANT_HOME/bin
 fi
+
+#
+# Todo
+#
+alias t="todo.sh "
+
+#
+
 
 #
 # Cassandra
@@ -91,7 +99,7 @@ fi
 #
 # Mongo DB
 #
-export MONGO_DB_HOME="/Applications/mongodb-osx-x86_64-2.6.3"
+export MONGO_DB_HOME="/Users/davegwartney/mongodb"
 if [ -d "$MONGO_DB_HOME" ]
 then
     export PATH="$PATH:$MONGO_DB_HOME/bin"
@@ -106,7 +114,7 @@ alias gits="cd $GITS"
 
 alias love="/Applications/love.app/Contents/MacOS/love" 
 alias editmd="open -a /Applications/haroopad.app"
-alias intellij="open -a '/Applications/IntelliJ IDEA 16.app'"
+alias intellij="open -a '/Applications/IntelliJ IDEA.app'"
 alias pycharm="open -a '/Applications/PyCharm.app'"
 
 alias open-dir="open file://$(pwd)"
@@ -127,12 +135,12 @@ export PATH=/usr/local/bin:$PATH
 # Import.io
 #
 
-IMPORT_IO_RC=$HOME/.import-io
-[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
+#IMPORT_IO_RC=$HOME/.import-io
+#[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
 
-
-IMPORT_IO_FUNC=$HOME/.import-io.sh
-[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
+#
+#IMPORT_IO_FUNC=$HOME/.import-io.sh
+#[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
 
 #
 # Android SDK Setup
@@ -145,7 +153,7 @@ alias android-eclipse="open $ANDROID_SDK/eclipse/Eclipse.app/"
 #
 # Matlab
 #
-alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodesktop"
+alias matlab="/Applications/MATLAB_R2016a.app/bin/matlab -nodesktop"
 
 #
 # Boundary API Configuration
@@ -207,6 +215,8 @@ function spoon() {
  popd > /dev/null 2>&1
 }
 
+export PATH=/Applications/data-integration:$PATH
+
 #
 # OpenStack Configuration
 #
@@ -235,6 +245,13 @@ export GOPATH=$HOME/golang
 export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
+
+#
+# Python virtual environments
+#
+export WORKON_HOME=$HOME/.virtualenvs   # optional
+export PROJECT_HOME=$HOME/projects      # optional
+[ -e /usr/local/bin/virtualenvwrapper.sh ] &&  source /usr/local/bin/virtualenvwrapper.sh
 
 #
 # Help function that activates the python
@@ -340,13 +357,18 @@ then
     export PATH="/anaconda/bin:$PATH"
 fi
 
+function diff-files() {
+diff --new-line-format="" --unchanged-line-format="" $1 $2
+}
+
 
 # added by Anaconda3 4.2.0 installer
 export PATH="//anaconda/bin:$PATH"
-source /usr/local/opt/autoenv/activate.sh
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+
+export PATH="/usr/local/opt/sqlite/bin:$PATH"
