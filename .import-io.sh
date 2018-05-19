@@ -30,6 +30,8 @@
 #     IMPORT_IO_FUNC=$HOME/.import-io.sh
 #     [ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC"
 
+IMPORT_IO_END_POINT="import.io"
+
 
 
 io-extractor-crawl-run() {
@@ -46,9 +48,9 @@ io-extractor-crawl-run() {
 
     if [ $# -eq 2 ]
     then 
-        curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
+        curl -s X GET "https://store.${IMPORT_IO_ENDPOINT}/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq ".hits.hits | .[] | select(._id==\"${crawl_run_id}\")"
     else
-       curl -s X GET "https://store.import.io/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
+       curl -s X GET "https://store.${IMPORT_IO_ENDPOINT}/store/crawlrun/_search?_sort=_meta.creationTimestamp&_page=${page}&_perPage=${per_page}&extractorId=${extractor_id}&_apikey=$IMPORT_IO_API_KEY" | jq .
     fi
 set +x
 
@@ -77,7 +79,7 @@ io-extractor-crawl-run-log() {
         return 1
     fi
     log_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.log' | tr -d '"')
-    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/crawlRun/$crawl_run_id/_attachment/log/$log_id?_apikey=$IMPORT_IO_API_KEY"
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.${IMPORT_IO_ENDPOIN}/crawlRun/$crawl_run_id/_attachment/log/$log_id?_apikey=$IMPORT_IO_API_KEY"
 }
 
 io-extractor-crawl-run-url-list() {
@@ -105,6 +107,20 @@ io-extractor-crawl-run-csv() {
     csv_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.csv' | tr -d '"')
     curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/crawlRun/$crawl_run_id/_attachment/csv/$csv_id?_apikey=$IMPORT_IO_API_KEY"
 }
+
+io-extractor-crawl-run-sample() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+
+    if [ $# -ne 2 ]
+    then
+        echo "usage: io-extractor-crawl-run-sample extractor_id craw_run_id"
+        return 1
+    fi
+    sample_id=$(io-extractor-crawl-run $extractor_id $crawl_run_id | jq '.fields.sample' | tr -d '"')
+    curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/store/crawlRun/$crawl_run_id/_attachment/sample/$sample_id?_apikey=$IMPORT_IO_API_KEY" | jq .
+}
+
 
 io-extractor-crawl-run-state() {
     typeset -r extractor_id=$1
@@ -231,6 +247,27 @@ io-extractor-csv() {
     fi
 }
 
+io-extractor-xlsx() {
+    typeset -r extractor_id=$1
+    typeset -r crawl_run_id=$2
+    if [ $# -eq 2 -o $# -eq 1 ]
+    then
+        :
+    else
+        echo "usage: io-extractor-xlsx extractor_id [crawl_run_id]"
+	    return 1
+    fi
+
+    if [ -z ${crawl_run_id} ]
+    then
+        curl -s -L -X GET -H 'Accept-Encoding: gzip' --compressed "https://data.import.io/extractor/$extractor_id/xlsx/latest?_apikey=$IMPORT_IO_API_KEY"
+    else
+        csv_id=$(io-extractor-crawl-run ${extractor_id} ${crawl_run_id} | jq '.fields | .csv' | tr -d '"')
+        curl -s -X GET -H 'Accept-Encoding: gzip' --compressed "https://store.import.io/crawlRun/$crawl_run_id/_attachment/xlsx/$csv_id?_apikey=$IMPORT_IO_API_KEY"
+    fi
+}
+
+
 io-extractor-files() {
     typeset -r extractor_id=$1
     typeset -r crawl_run_id=$2
@@ -319,7 +356,8 @@ io-extractor-list() {
     do
         if [ -z "$search_value" ]
         then
-            curl -s -X GET "${command}&page=${i}" | jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}'
+            # curl -s -X GET "${command}&page=${i}" | jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}'
+            curl -s -X GET "${command}&page=${i}" | jq .
         else
             curl -s -X GET "${command}&page=${i}" | jq '.hits.hits | .[] | .fields | {name: .name, guid: .guid}' | grep -A 2 -B 1 ${search_value} | grep -v -- '--' | jq .
         fi

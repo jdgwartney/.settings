@@ -135,12 +135,12 @@ export PATH=/usr/local/bin:$PATH
 # Import.io
 #
 
-#IMPORT_IO_RC=$HOME/.import-io
-#[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
+IMPORT_IO_RC=$HOME/.import-io
+[ -r "$IMPORT_IO_RC" ] && source "$IMPORT_IO_RC" 
 
 #
-#IMPORT_IO_FUNC=$HOME/.import-io.sh
-#[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
+IMPORT_IO_FUNC=$HOME/.import-io.sh
+[ -r "$IMPORT_IO_FUNC" ] && source "$IMPORT_IO_FUNC" 
 
 #
 # Android SDK Setup
@@ -304,30 +304,6 @@ TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
 #PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 #export PATH
 
-# Setting PATH for Python 3.4
-# The orginal version is saved in .bash_profile.pysave
-#PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
-#export PATH
-
-chef_installed=$(typeset chef)
-if [ -n "$chef_installed" ]
-then
-  eval "$(chef shell-init bash)"
-fi
-
-# added by Anaconda3 2.3.0 installer
-if [ -d /anaconda/bin ]
-then
-    export PATH="/anaconda/bin:$PATH"
-fi
-
-#
-# Setup TrueSight Pulse CLI environment variables
-#
-py 2>&1 > /dev/null
-TSP_CLI_ENV=$(type -p tsp-cli-env.sh | cut -f3 -d ' ')
-[ -r "$TSP_CLI_ENV" ] && source "$TSP_CLI_ENV"
-
 #
 # Alias configuration
 #
@@ -335,35 +311,9 @@ ALIAS_FILE=$HOME/.alias
 [ -r "$ALIAS_FILE" ] && source "$ALIAS_FILE"
 
 
-# Setting PATH for Python 2.7
-# The orginal version is saved in .bash_profile.pysave
-#PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
-#export PATH
-
-# Setting PATH for Python 3.4
-# The orginal version is saved in .bash_profile.pysave
-#PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
-#export PATH
-
-chef_installed=$(typeset chef)
-if [ -n "$chef_installed" ]
-then
-  eval "$(chef shell-init bash)"
-fi
-
-# added by Anaconda3 2.3.0 installer
-if [ -d /anaconda/bin ]
-then
-    export PATH="/anaconda/bin:$PATH"
-fi
-
 function diff-files() {
 diff --new-line-format="" --unchanged-line-format="" $1 $2
 }
-
-
-# added by Anaconda3 4.2.0 installer
-export PATH="//anaconda/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc'; fi
