@@ -321,4 +321,8 @@ if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/path.bash.inc' ]; then s
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc' ]; then source '/Users/davegwartney/Downloads/google-cloud-sdk/completion.bash.inc'; fi
 
+
+# added by Anaconda3 5.1.0 installer
+export PATH="/anaconda3/bin:$PATH"
+
 export PATH="/usr/local/opt/sqlite/bin:$PATH"
